@@ -59,7 +59,6 @@ int main()
 		int fl=0;
 		if(p*p==n)
 		{
-			//cout<<"YO"<<endl;
 			int j;
 			forn(j,n) cout<<"1";
 			cout<<endl;
