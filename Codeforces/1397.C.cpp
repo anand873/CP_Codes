@@ -28,30 +28,38 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
+	ll n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
-	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+	vl A(n);
+	take(A,0,n);
+	if(n==1)
+	{
+		cout<<"1 1"<<endl;
+		cout<<-A[0]<<endl;
+		cout<<"1 1"<<endl;
+		cout<<A[0]<<endl;
+		cout<<"1 1"<<endl;
+		cout<<-A[0]<<endl;
 	}
-	cout<<final_ans<<endl;
+	else
+	{
+		cout<<1<<" "<<n<<endl;
+		for(int i=0;i<n;i++)
+		{
+			cout<<(A[i]*n)*(-1)<<" ";
+		}
+		cout<<endl;
+
+		cout<<2<<" "<<n<<endl;
+		for(int i=1;i<n;i++)
+		{
+			cout<<A[i]*(n-1)<<" ";
+		}
+		cout<<endl;
+
+		cout<<1<<" "<<1<<endl;
+		cout<<A[0]*(n-1)<<endl;
+	}
+		
 }	

@@ -30,28 +30,57 @@ int main()
 {
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	vvl A(n,vl(n));
+	A[0][0]=0;
+	A[n-1][n-1]=0;
+	int cnt = 0;
+	for(int i=1;i<n;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		A[i][0] = 1;
+		for(int j=1;j<=i;j++)
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			A[i-j][j] = A[i-j+1][j-1] + (1ll<<cnt);
+		}
+		cnt++;
+	}
+	for(int j=1;j<n-1;j++)
+	{
+		A[n-1][j] = 1;
+		for(int i=n-2;i>=j;i--)
+		{
+			A[i][j+(n-i)-1] = A[i+1][j + (n-i)-2] + (1ll<<cnt);
+		}
+		cnt++;
+	}
+
+	for(int i=0;i<n;i++)
+	{
+		prinv(A[i]);
+	}
+	ll tadd = (1ll<<n-1) - 1 - (2*n-3);
+	int q;
+	cin>>q;
+	while(q--)
+	{
+		ll k;
+		cin>>k;
+		k += tadd;
+		string path;
+		for(int i=0;i<2*n-2;i++)
+		{
+			if((k>>i)&1) path+='D';
+			else path+='R';
+		}
+		int x = 1,y = 1;
+
+		cout<<x<<" "<<y<<endl;
+		for(int i=0;i<path.length();i++)
+		{
+			if(path[i]=='R') y+=1;
+			else x+=1;
+
+			cout<<x<<" "<<y<<endl;
 		}
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
 }	

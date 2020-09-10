@@ -23,35 +23,61 @@ typedef vector<pll> vpll;
 #define KStest() int t,t1;cin>>t;t1=t;while(t--)
 #define KScout cout<<"Case #"<<t1-t<<": "
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-const int MOD = 1e9+7,MAX = 1e6+5;
+const int MOD = 1e9+7,MAX = 2e5+5;
 const ll INF = 1e18+5;
+
+ll powN(ll a,ll p)
+{
+	if(p==0) return 1;
+	ll z=powN(a,p/2);
+	z=(z*z)%MOD;
+	if(p%2) z=(z*a)%MOD;
+	return z;
+}
+
+int sz=0;
+vector<bool> vis;
+vvi A;
+void dfs(int u)
+{
+	vis[u]=true;
+	sz++;
+	for(auto v:A[u])
+	{
+		if(!vis[v])
+		{
+			dfs(v);
+		}
+	}
+}
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	fastio
+	int n,k;
+	cin>>n>>k;
+	A.resize(n+1);
+	for(int i=0;i<n-1;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		int u,v,w;
+		cin>>u>>v>>w;
+		if(w==0)
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			A[u].push_back(v);
+			A[v].push_back(u);
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
-}	
+	ll ans=0;
+	vis.resize(n+1);
+	for(int i=1;i<=n;i++)
+	{
+		sz=0;
+		if(!vis[i]) 
+		{
+			dfs(i);
+			ans += powN(sz,k);
+			ans%=MOD;
+		}
+	}
+	cout<<((powN(n,k)-ans)%MOD+MOD)%MOD<<endl;
+}

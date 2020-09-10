@@ -23,35 +23,48 @@ typedef vector<pll> vpll;
 #define KStest() int t,t1;cin>>t;t1=t;while(t--)
 #define KScout cout<<"Case #"<<t1-t<<": "
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-const int MOD = 1e9+7,MAX = 1e6+5;
+const int MOD = 1e9+7,MAX = 1e5+5;
 const ll INF = 1e18+5;
+
+//////////////////Sieve////////////////////
+vector<bool> is_prime(MAX, true);
+vi MinDiv(MAX);
+void Sieve()
+{
+	is_prime[0] = is_prime[1] = false;
+	int i,j;
+	for (i = 2; i*i <= MAX; i++) 
+	{
+    	if (is_prime[i]) 
+    	{
+    		MinDiv[i]=i;
+        	for (j = i * i; j <= MAX; j += i)
+            {
+				is_prime[j] = false;
+				MinDiv[j]=i;
+    		}
+    	}
+	}
+	for(int i=2;i<=MAX;i++) if(is_prime[i]) MinDiv[i]=i;
+}
+//////////////////Sieve////////////////////
+
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	int n,a,b,c;
+	cin>>n>>a>>b>>c;
+	int ans=0;
+	for(int x=0;x<=n;x++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		for(int y=0;y<=n;y++)
 		{
-			if(B[i]>mx)
+			int sum = a*x+b*y;
+			if(sum<=n&&(n-sum)%c==0)
 			{
-				B[i] = -MOD;
+				ans = max(ans,x+y+(n-sum)/c);
 			}
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
+	cout<<ans<<endl;
 }	

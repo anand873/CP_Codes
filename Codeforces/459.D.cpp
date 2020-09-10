@@ -1,6 +1,20 @@
 //Author: AnandRaj doubleux
-#include <bits/stdc++.h>
+#include <bits/extc++.h>
 using namespace std;
+
+template <typename K, typename V, typename Comp = std::less<K>>
+using order_statistic_map = __gnu_pbds::tree<
+	K, V, Comp,
+	__gnu_pbds::rb_tree_tag,
+	__gnu_pbds::tree_order_statistics_node_update
+>;
+
+template <typename K, typename Comp = std::less<K>>
+using order_statistic_set = order_statistic_map<K, __gnu_pbds::null_type, Comp>;
+
+// Supports
+//  auto iterator = order_statistic_set().find_by_order(int); // (0-indexed)
+//  int num_strictly_smaller = order_statistic_set().order_of_key(key);
 
 typedef long long ll;
 typedef long double ld;
@@ -30,28 +44,27 @@ int main()
 {
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
-	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
+	vi A(n);
+	take(A,0,n);
+	unordered_map<int,int> Mf,Mb;
+	vi dpf(n),dpb(n);
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+	for(int i=0;i<n;i++)
+	{
+		dpb[i] = ++Mb[A[i]];
 	}
-	cout<<final_ans<<endl;
+	for(int j=n-1;j>=0;j--)
+	{
+		dpf[j] = ++Mf[A[j]];
+	}
+	order_statistic_set<pair<int,int>> S;
+	S.insert({dpf[n-1],n-1});
+	ll ans = 0;
+	for(int i=n-2;i>=0;i--)
+	{
+		ans += S.order_of_key({dpb[i],i});
+		S.insert({dpf[i],i});
+	}
+	cout<<ans<<endl;
+
 }	

@@ -28,30 +28,62 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	int r,g,b;
+	cin>>r>>g>>b;
+	vi R(r),G(g),B(b);
+	take(R,0,r);
+	take(G,0,g);
+	take(B,0,b);
+
+	sort(all(R));
+	sort(all(G));
+	sort(all(B));
+	reverse(all(R));
+	reverse(all(G));
+	reverse(all(B));
+
+	ll dp[r+1][g+1][b+1];
+
+	for(int i=0;i<=r;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		for(int j=0;j<=g;j++)
 		{
-			if(B[i]>mx)
+			for(int k=0;k<=b;k++)
 			{
-				B[i] = -MOD;
+				dp[i][j][k]=0;
 			}
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
+	dp[0][0][0] = 0;
+
+	for(int i=0;i<=r;i++)
+	{
+		for(int j=0;j<=g;j++)
+		{
+			for(int k=0;k<=b;k++)
+			{
+				if(i<r&&j<g)
+				{
+					dp[i+1][j+1][k] = max(dp[i+1][j+1][k],dp[i][j][k]+R[i]*G[j]);
+				}
+				if(i<r&&k<b)
+				{
+					dp[i+1][j][k+1] = max(dp[i+1][j][k+1],dp[i][j][k]+R[i]*B[k]);
+				}
+				if(j<g&&k<b)
+				{
+					dp[i][j+1][k+1] = max(dp[i][j+1][k+1],dp[i][j][k]+G[j]*B[k]);
+				}
+			}
+		}
+	}
+	ll ans=0;
+	for(int i=0;i<=r;i++)
+	{
+		for(int j=0;j<=g;j++)
+		{
+			for(int k=0;k<=b;k++) ans = max(ans,dp[i][j][k]);
+		}
+	}
+	cout<<ans<<endl;
 }	

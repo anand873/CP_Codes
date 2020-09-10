@@ -30,28 +30,15 @@ int main()
 {
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	H.resize(n);
+	take(H,0,n);
+	
+	sort(H.begin(),H.end());
+	for(int i=1;i<n-1;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		if(H[i]!=H[0]&&H[i]!=H[n-1]);
+		S.insert(H[i]);
 	}
-	cout<<final_ans<<endl;
+	cout<<S.size()+1<<endl;
+	
 }	

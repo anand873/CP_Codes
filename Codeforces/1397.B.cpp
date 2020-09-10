@@ -23,35 +23,30 @@ typedef vector<pll> vpll;
 #define KStest() int t,t1;cin>>t;t1=t;while(t--)
 #define KScout cout<<"Case #"<<t1-t<<": "
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-const int MOD = 1e9+7,MAX = 1e6+5;
+const int MOD = 1e9+7,MAX = 1e7+5;
 const ll INF = 1e18+5;
 
 int main()
 {
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	vi A(n);
+	take(A,0,n);
+	sort(all(A));
+	ll cost = INF;
+	ll M = 1;
+	
+	for(ll c=1;c<MAX;c++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		if(pow(c,n-1)>INF) break;
+		ll temp = 0;
+		ll mul = 1;
+		for(int i=0;i<n;i++)
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			temp += abs(A[i]-mul);
+			mul*=c;
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		cost = min(cost,temp);
 	}
-	cout<<final_ans<<endl;
+	cout<<cost<<endl;
 }	

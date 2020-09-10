@@ -28,30 +28,58 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	int n,m,Sx,Sy;
+	cin>>n>>m>>Sx>>Sy;
+	vpii V;
+	V.push_back({Sx,Sy});
+	V.push_back({Sx,1});
+	for(int j=2;j<=m;j++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		if(j!=Sy) V.push_back({Sx,j});
+	}
+	for(int i = Sx+1;i<=n;i++)
+	{
+		if((i-Sx)%2)
 		{
-			if(B[i]>mx)
+			for(int j=m;j>=1;j--) V.push_back({i,j});
+		}
+		else
+		{
+			for(int j=1;j<=m;j++) V.push_back({i,j});
+		}
+	}
+	int last;
+	if((n-Sx)%2==0)
+	{
+		for(int i=Sx-1;i>0;i--)
+		{
+			if((Sx-i)%2==0)
 			{
-				B[i] = -MOD;
+				for(int j=1;j<=m;j++) V.push_back({i,j});
+			}
+			else
+			{
+				for(int j=m;j>=1;j--) V.push_back({i,j});
 			}
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
+	else
+	{
+		for(int i=Sx-1;i>0;i--)
+		{
+			if((Sx-i)%2)
+			{
+				for(int j=1;j<=m;j++) V.push_back({i,j});
+			}
+			else
+			{
+				for(int j=m;j>=1;j--) V.push_back({i,j});
+			}
+		}
+	}
+
+	for(auto p:V)
+	{
+		prinp(p);
+	}
 }	

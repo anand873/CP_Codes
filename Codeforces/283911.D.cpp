@@ -25,33 +25,41 @@ typedef vector<pll> vpll;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1e9+7,MAX = 1e6+5;
 const ll INF = 1e18+5;
+vi A;
+int find(int x)
+{
+	int ans = 0;
+	int low = 0,high=A.size()-1;
+	while(low<=high)
+	{
+		int mid = low + (high-low)/2;
+		if(A[mid]<=x)
+		{
+			ans = mid+1;
+			low = mid+1;
+		}
+		else
+		{
+			high = mid-1;
+		}
+	}
+	return ans;
+}
 
 int main()
 {
-	int n;
+	int n,k;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	A.resize(n);
+	take(A,0,n);
+	sort(all(A));
+	cin>>k;
+	while(k--)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		int l,r;
+		cin>>l>>r;
+		int low = find(l-1);
+		int high = find(r);
+		cout<<high-low<<endl;
 	}
-	cout<<final_ans<<endl;
 }	

@@ -31,27 +31,49 @@ int main()
 	int n;
 	cin>>n;
 	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	vector<int> In;
+	for(int i=0;i<n;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		In.push_back(i+1);
+	}
+	while(In.size()>1)
+	{
+		vi Temp;
+		for(int i=0;i<In.size()-1;i+=2)
 		{
-			if(B[i]>mx)
+			cout<<"? "<<In[i]<<" "<<In[i+1]<<endl;
+			int left;
+			cin>>left;
+			cout<<"? "<<In[i+1]<<" "<<In[i]<<endl;
+			int right;
+			cin>>right;
+			if(left<right)
 			{
-				B[i] = -MOD;
+				A[In[i+1]] = right;
+				Temp.push_back(In[i]);
+			}
+			else
+			{
+				A[In[i]] = left;
+				Temp.push_back(In[i+1]);
 			}
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		if(In.size()%2) Temp.push_back(In.back());
+		In = Temp;
 	}
-	cout<<final_ans<<endl;
+
+	set<int> S;
+	for(int i=0;i<n;i++) S.insert(i+1);
+	for(int i=1;i<=n;i++)
+	{
+		if(S.count(A[i])) S.erase(A[i]);
+	}
+	for(int i=1;i<=n;i++)
+	{
+		if(A[i]==0) A[i] = * (S.begin());
+	}
+	cout<<"!";
+	for(int i=1;i<=n;i++) cout<<" "<<A[i];
+	cout<<endl;
+
 }	

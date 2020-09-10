@@ -28,30 +28,42 @@ const ll INF = 1e18+5;
 
 int main()
 {
+	fastio
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
-	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
+	vi S(n);
+	take(S,0,n);
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+	cin>>n;
+	vi R(n);
+	take(R,0,n);
+
+	int maxM;
+	cin>>maxM;
+
+	vpii X(n);
+	for(int i=0;i<n;i++)
+	{
+		X[i] = {R[i],S[i]};
 	}
-	cout<<final_ans<<endl;
+	sort(all(X));
+
+	ll ans = 0;
+	multiset<int> V;
+	ll sum = 0;
+	for(int i=n-1;i>=0;i--)
+	{
+		V.insert(X[i].second);
+		sum+=X[i].second;
+
+		if(V.size()>maxM)
+		{
+			sum -= *(V.begin());
+			V.erase(V.begin());
+		}
+		ans = max(ans,sum*X[i].first);
+	}
+	cout<<ans<<endl;
+
+
 }	

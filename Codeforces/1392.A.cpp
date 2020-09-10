@@ -28,30 +28,18 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		int n;
+		cin>>n;
+		vi A(n);
+		take(A,0,n);
+		set<int> S;
+		for(int i=0;i<n;i++)
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			S.insert(A[i]);
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		if(S.size()==1) cout<<n<<endl;
+		else cout<<1<<endl;
 	}
-	cout<<final_ans<<endl;
 }	

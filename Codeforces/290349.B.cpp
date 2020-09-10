@@ -28,30 +28,63 @@ const ll INF = 1e18+5;
 
 int main()
 {
+	fastio
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	cin>>n;
+	vvi X(n+1,vi(n+1));
+	for(int i=1;i<=n;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		for(int j=1;j<=n;j++) cin>>X[i][j];
+	}
+	int maxs;
+	cin>>maxs;
+
+	vvl dp(n+1,vl(n+1));
+	for(int j=1;j<=n;j++) dp[1][j] = X[1][j];
+
+	for(int j=1;j<=n;j++)
+	{
+		for(int i=2;i<=n;i++)
 		{
-			if(B[i]>mx)
+			dp[i][j] += dp[i-1][j] + X[i][j];
+		}
+	}
+
+	for(int i=1;i<=n;i++)
+	{
+		for(int j=2;j<=n;j++)
+		{
+			dp[i][j] += dp[i][j-1];
+		}
+	}
+	int ans = 0;
+	int low = 1,high = n;
+
+	while(low<=high)
+	{
+		int mid = low + (high-low)/2;
+
+		bool can=true;
+
+		for(int i=1;i+mid-1<=n;i++)
+		{
+			for(int j=1;j+mid-1<=n;j++)
 			{
-				B[i] = -MOD;
+				if(dp[i+mid-1][j+mid-1]+dp[i-1][j-1]-dp[i+mid-1][j-1]-dp[i-1][j+mid-1]>maxs) can=false;
 			}
 		}
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+		if(can)
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			ans = mid;
+			low = mid+1;
 		}
-		final_ans = max(final_ans,ans-mx);
+		else high = mid-1;
 	}
-	cout<<final_ans<<endl;
+	cout<<ans<<endl;
+
+	
+
+
 }	

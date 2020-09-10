@@ -26,32 +26,43 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1e9+7,MAX = 1e6+5;
 const ll INF = 1e18+5;
 
+vi SC;
+vvi A;
+vi V;
+
+void dfs(int u)
+{
+	SC[u] = V[u];
+	int ans = 0;
+	for(auto v:A[u])
+	{
+		dfs(v);
+		ans = max(ans,SC[v]);
+	}
+	SC[u] += ans;
+}
+
 int main()
 {
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	A.resize(n);
+	SC.resize(n);
+	V.resize(n);
+	for(int i=0;i<n;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		int p;
+		cin>>p;
+		if(i!=0) A[p].push_back(i);
 	}
-	cout<<final_ans<<endl;
+	cin>>n;
+	for(int i=0;i<n;i++)
+	{
+		cin>>V[i];
+	}
+
+	dfs(0);
+	int ans = -MOD;
+	for(int i=0;i<n;i++) ans = max(ans,SC[i]);
+	cout<<ans<<endl;
 }	

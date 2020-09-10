@@ -26,32 +26,56 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1e9+7,MAX = 1e6+5;
 const ll INF = 1e18+5;
 
+// int Sim(vi A,int last)
+// {
+// 	bool can=false;
+// 	for(int i=0;i<A.size();i++)
+// 	{
+// 		if(i==last) continue;
+// 		if(A[i]!=0) can=true;
+// 	}
+// 	if(!can)
+// 	{
+// 		return 1;
+// 	}
+// 	else
+// 	{
+// 		int n=A.size();
+// 		set<int> W;
+// 		for(int i=0;i<n;i++)
+// 		{
+// 			if(last==i||A[i]==0) continue;
+// 			vi X = A;
+// 			X[i]-=1;
+// 			W.insert(1-Sim(X,i));
+// 		}
+// 		if(W.size()==1&&*(W.begin())==1) return 1;
+// 		else return 0;
+// 	}
+// }
+
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		int n;
+		cin>>n;
+		vi A(n);
+		take(A,0,n);
+		sort(all(A));
+		reverse(all(A));
+		int xo=A[0];
+		int sum=0;
+		for(int i=1;i<n;i++)
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			xo^=A[i];
+			sum+=A[i];
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+		if(A[0]>sum||xo%2==1)
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			cout<<"T"<<endl;
 		}
-		final_ans = max(final_ans,ans-mx);
+		else cout<<"HL"<<endl;
+		
 	}
-	cout<<final_ans<<endl;
 }	

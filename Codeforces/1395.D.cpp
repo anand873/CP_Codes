@@ -19,39 +19,63 @@ typedef vector<pll> vpll;
 #define prinp(p) cout<<p.first<<" "<<p.second<<endl
 #define prinv(V) for(auto v:V) cout<<v<<" ";cout<<endl
 #define take(V,f,n) for(int in=f;in<f+n;in++) cin>>V[in]
-#define what(x) cerr<<#x<<" = "<<x<<endl
+#define what(x) cerr<<#x<<" = "<<x<<", "
 #define KStest() int t,t1;cin>>t;t1=t;while(t--)
 #define KScout cout<<"Case #"<<t1-t<<": "
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1e9+7,MAX = 1e6+5;
 const ll INF = 1e18+5;
 
+vl A;
+vl G,B;
+
+ll ok(ll mid,ll d)
+{
+	ll Bads = B[mid];
+	int waste = max(0ll,(mid-1)*d);
+	waste -= (B.size()-1-mid);
+	waste = max(0,waste);
+	int good = G.size()-1 - waste;
+	Bads += G[good];
+	return Bads;
+}
+
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
-	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
+	ll n,d,m;
+	cin>>n>>d>>m;
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+	A.resize(n);
+	take(A,0,n);
+	sort(all(A));
+	int how=0;
+	for(int i=0;i<n;i++)
+	{
+		if(A[i]<=m) G.push_back(A[i]);
+		else {B.push_back(A[i]);how++;}
 	}
-	cout<<final_ans<<endl;
+	G.push_back(0);
+	B.push_back(0);
+	reverse(all(B));
+	reverse(all(G));
+
+	for(int i=1;i<(int)B.size();i++)
+	{
+		B[i]+=B[i-1];
+	}
+	for(int i=1;i<(int)G.size();i++)
+	{
+		G[i]+=G[i-1];
+	}
+
+	ll ans =0;
+	for(int mid = 0;mid<=how;mid++)
+	{
+		if(mid + (mid-1)*d>n) break;
+		ans = max(ans,ok(mid,d));
+	}
+
+	cout<<ans<<endl;
+
+
 }	

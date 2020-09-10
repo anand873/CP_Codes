@@ -23,35 +23,39 @@ typedef vector<pll> vpll;
 #define KStest() int t,t1;cin>>t;t1=t;while(t--)
 #define KScout cout<<"Case #"<<t1-t<<": "
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-const int MOD = 1e9+7,MAX = 1e6+5;
+const int MOD = 998244353,MAX = 2e5+5;
 const ll INF = 1e18+5;
+
+ll powN(ll a,ll p)
+{
+	if(p==0) return 1;
+	ll z = powN(a,p/2);
+	z*=z;
+	z%=MOD;
+	if(p%2) z*=a;
+	z%=MOD;
+	return z;
+}
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	fastio
+	
+	int n,m;
+	cin>>n>>m;
+	string a,b;
+	cin>>a>>b;
+	vector<int> B(m+1);
+	for(int i=0;i<m;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		B[i+1] = B[i] + (b[i]-'0');
 	}
-	cout<<final_ans<<endl;
-}	
+
+	ll ans = 0; 
+	for(int i=max(0,n-m)+1;i<=n;i++)
+	{
+		ans += (a[i-1]-'0')*(B[m-n+i]*(powN(2ll,n-i)))%MOD;
+		ans%=MOD;
+	}
+	cout<<ans<<endl;
+}

@@ -30,28 +30,53 @@ int main()
 {
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	vector<int> V(9);
+
+	map<int,int> M;
+	for(int i=0;i<n;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		int x;
+		cin>>x;
+		M[x]++;
+	}
+	for(auto m:M)
+	{
+		V[min(m.second,8)]++;
+	}
+
+	int q;
+	cin>>q;
+	for(int i=0;i<q;i++)
+	{
+		char c;
+		int x;
+		cin>>c>>x;
+		if(c=='+')
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			V[min(8,M[x])]--;
+			M[x]++;
+			V[min(8,M[x])]++;
+		}
+		else
+		{
+			V[min(8,M[x])]--;
+			M[x]--;
+			V[min(8,M[x])]++;
 		}
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+		int more2 = 0,more4=0,more6=0,more8=0;
+
+		for(int i=0;i<=8;i++)
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			if(i>=2) more2+=V[i];
+			if(i>=4) more4+=V[i];
+			if(i>=6) more6+=V[i];
+			if(i>=8) more8+=V[i]; 
 		}
-		final_ans = max(final_ans,ans-mx);
+		if(more8>=1|| (more4>=2) || (more4==1&&more2>=3) || (more6==1&&more2>=2)) cout<<"YES"<<endl;
+		else cout<<"NO"<<endl;
+
 	}
-	cout<<final_ans<<endl;
+
+
 }	

@@ -25,33 +25,70 @@ typedef vector<pll> vpll;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1e9+7,MAX = 1e6+5;
 const ll INF = 1e18+5;
+vi A;
+ll f(int l,int r)
+{
+	if(l==r) return (A[l]!=0);
+	ll ans = 0;
+	int mina=MOD;
+	for(int i=l;i<=r;i++)
+	{
+		mina = min(mina,A[i]);
+	}
+	for(int i=l;i<=r;i++) A[i]-=mina;
+	ans += mina;
+	int curl=l;
+	while(curl<=r&&A[curl]==0) curl++;
 
+	int curr=curl;
+	for(int i=curl+1;i<=r;i++)
+	{
+		if(A[i]>0) curr++;
+		else
+		{
+			ans += f(curl,curr);
+			curl = curr+1;
+			while(curl<=r&&A[curl]==0)
+			{
+				curl++;
+			}
+			curr=curl;
+			i=curr;
+		}
+	}
+	ans += f(curl,curr);
+
+	return min((ll)r-l+1,ans);	
+
+
+}
 int main()
 {
 	int n;
 	cin>>n;
-	vi A(n+1);
+	A.resize(n+1);
 	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
-	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+	ll ans = 0;
+	int curl=1;
+	while(curl<=n&&A[curl]==0) curl++;
+
+	int curr=curl;
+	for(int i=curl+1;i<=n;i++)
+	{
+		if(A[i]>0) curr++;
+		else
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			ans += f(curl,curr);
+			curl = curr+1;
+			while(curl<=n&&A[curl]==0)
+			{
+				curl++;
+			}
+			curr=curl;
+			i=curr;
 		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
+	ans += f(curl,curr);
+	cout<<ans<<endl;
 }	

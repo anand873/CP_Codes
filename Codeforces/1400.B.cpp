@@ -28,30 +28,41 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
+		int p,f;
+		cin>>p>>f;
+		int cnts,cntw;
+		cin>>cnts>>cntw;
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+		int s,w;
+		cin>>s>>w;
+		int ans = 0;
+		for(int ps=0;ps<=min(p/s,cnts);ps++)
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			int tempans = ps; 
+			int rems = p - ps*s;
+			int pw = min(cntw,rems/w);
+			tempans+=pw;
+			int remw = cntw - pw;
+
+			if(s<=w)
+			{
+				int fs = min(f/s,cnts-ps);
+				tempans += fs;
+				int remf = f - fs*s;
+				tempans += min(remw,remf/w);
+			}
+			else
+			{
+				int fw = min(f/w,remw);
+				tempans += fw;
+				int remf = f - fw*w;
+				tempans += min(cnts-ps,remf/s);
+			}
+			ans = max(ans,tempans);
 		}
-		final_ans = max(final_ans,ans-mx);
+		cout<<ans<<endl;
+
 	}
-	cout<<final_ans<<endl;
 }	

@@ -28,30 +28,34 @@ const ll INF = 1e18+5;
 
 int main()
 {
+	fastio
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	vi TM(n);
+	take(TM,0,n);
+	deque<int> S;
+	deque<int> T;
+	deque<int> M;
+	int d = 0;
+	for(int i=0;i<n;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		while(!S.empty()&&*(S.begin())<TM[i])
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			S.pop_front();
 		}
+		while(!T.empty()&&*(T.begin())<TM[i]-9)
+		{
+			T.pop_front();
+		}
+		while(!M.empty()&&*(M.begin())<TM[i]-59)
+		{
+			M.pop_front();
+		}
+		S.push_back(TM[i]);
+		T.push_back(TM[i]);
+		M.push_back(TM[i]);
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		if(S.size()>3||T.size()>20||M.size()>60) d++;
 	}
-	cout<<final_ans<<endl;
+	cout<<d<<endl;
 }	

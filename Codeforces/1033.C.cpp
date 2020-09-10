@@ -28,30 +28,41 @@ const ll INF = 1e18+5;
 
 int main()
 {
+	fastio
+	
 	int n;
 	cin>>n;
 	vi A(n+1);
 	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	vi I(n+1);
+	for(int i=1;i<=n;i++) I[A[i]] = i;
+	vi W(n+1);
+	W[n] = 0;
+	for(int i=n-1;i>0;i--)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		bool good = false;
+		int st = I[i];
+		for(int in=st+i;in<=n;in+=i)
 		{
-			if(B[i]>mx)
+			if(A[in]>i&&W[A[in]]==0) 
 			{
-				B[i] = -MOD;
+				good = true;
 			}
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+		for(int in=st-i;in>0;in-=i)
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			if(A[in]>i&&W[A[in]]==0) 
+			{
+				good = true;
+			}
 		}
-		final_ans = max(final_ans,ans-mx);
+		if(good) W[i] = 1;
 	}
-	cout<<final_ans<<endl;
+	string s;
+	for(int i=1;i<=n;i++)
+	{
+		if(W[A[i]]==1) s += 'A';
+		else s += 'B';
+	}
+	cout<<s<<endl;
 }	

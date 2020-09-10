@@ -22,36 +22,35 @@ typedef vector<pll> vpll;
 #define what(x) cerr<<#x<<" = "<<x<<endl
 #define KStest() int t,t1;cin>>t;t1=t;while(t--)
 #define KScout cout<<"Case #"<<t1-t<<": "
+// #define endl '\n'
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1e9+7,MAX = 1e6+5;
 const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	fastio
+	test()
 	{
+		int n;
+		cin>>n;
+		vi A(n);
+		take(A,0,n);
 		vi B = A;
-		for(int i=1;i<=n;i++)
+		sort(all(B));
+		set<int> In;
+		for(int i=0;i<n;i++)
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			if(A[i]!=B[i]) In.insert(A[i]);
+		}
+		bool good=true;
+		for(auto in:In)
+		{
+			if(in%B[0]!=0) good=false;
 		}
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		if(good) cout<<"YES"<<endl;
+		else cout<<"NO"<<endl;
+
 	}
-	cout<<final_ans<<endl;
 }	

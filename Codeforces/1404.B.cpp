@@ -26,32 +26,67 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1e9+7,MAX = 1e6+5;
 const ll INF = 1e18+5;
 
+vvi A;
+vi D;
+int maxb;
+
+void dfs(int u,int p)
+{
+	D[u] = D[p]+1;
+	for(auto v:A[u])
+	{
+		if(v==p) continue;
+		else
+		{
+			dfs(v,u);
+		}
+	}
+}
+
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
+		int n,a,b,da,db;
+		cin>>n>>a>>b>>da>>db;
+		
+		A.clear();
+		D.clear();
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+		A.resize(n+1);
+		for(int i=0;i<n-1;i++)
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			int u,v;
+			cin>>u>>v;
+			A[u].push_back(v);
+			A[v].push_back(u);
 		}
-		final_ans = max(final_ans,ans-mx);
+		if(db<=2*da) cout<<"Alice"<<endl;
+		else
+		{
+			D.resize(n+1);
+			D[0]=-1;
+			dfs(a,0);
+			if(D[b]<=da) cout<<"Alice"<<endl;
+			else
+			{
+				int en=0;
+				for(int i=1;i<=n;i++)
+				{
+					if(D[en]<D[i])
+					{
+						en=i;
+					}
+				}	
+				D[0]=-1;
+				dfs(en,0);
+				int mad = 0;
+				for(int i=1;i<=n;i++) mad = max(D[i],mad);
+				if(mad>2*da) cout<<"Bob"<<endl;
+				else cout<<"Alice"<<endl;
+			}
+
+		}
+		
 	}
-	cout<<final_ans<<endl;
 }	

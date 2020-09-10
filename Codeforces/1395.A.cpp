@@ -28,30 +28,26 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		ll r,g,b,w;
+		cin>>r>>g>>b>>w;
+
+		if(w%2==0)
 		{
-			if(B[i]>mx)
+			if(r%2 + g%2 + b%2 == 2) cout<<"No"<<endl;
+			else cout<<"Yes"<<endl;
+		}
+		else
+		{
+			if(r%2 + g%2 + b%2 == 1) cout<<"No"<<endl;
+			else if(r%2 + g%2 + b%2 ==2)
 			{
-				B[i] = -MOD;
+				if(min({r,g,b})==0) cout<<"No"<<endl;
+				else cout<<"Yes"<<endl;
 			}
+			else cout<<"Yes"<<endl;
 		}
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
 }	

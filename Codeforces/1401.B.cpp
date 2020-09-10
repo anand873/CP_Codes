@@ -22,36 +22,37 @@ typedef vector<pll> vpll;
 #define what(x) cerr<<#x<<" = "<<x<<endl
 #define KStest() int t,t1;cin>>t;t1=t;while(t--)
 #define KScout cout<<"Case #"<<t1-t<<": "
+#define endl '\n'
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1e9+7,MAX = 1e6+5;
 const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	fastio
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		vi X(3);
+		take(X,0,3);
+		vi Y(3);
+		take(Y,0,3);
+		ll ans = 0;
+
+		ans += 2*min(X[2],Y[1]);
+
+		if(X[2]>=Y[1])
 		{
-			if(B[i]>mx)
+			if(X[2]-Y[1] + X[0] >= Y[2]) cout<<ans<<endl;
+			else
 			{
-				B[i] = -MOD;
+				ans -= 2*(Y[2]-X[2]+Y[1]-X[0]);
+				cout<<ans<<endl;
 			}
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+		else
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			ans -= 2*max(0,Y[2]-X[0]);
+			cout<<ans<<endl;
 		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
 }	

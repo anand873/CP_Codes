@@ -26,32 +26,57 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int MOD = 1e9+7,MAX = 1e6+5;
 const ll INF = 1e18+5;
 
+/////////////////FastExp///////////////////
+ll powN(ll a,ll p)
+{
+	if(p==0) return 1;
+	ll z=powN(a,p/2);
+	z=(z*z)%MOD;
+	if(p%2) z=(z*a)%MOD;
+	return z;
+}
+/////////////////FastExp///////////////////
+
+///////////////////PnC/////////////////////
+struct PnC
+{
+	int n;
+	vl F,I;
+	void init(int n)
+	{
+		F.resize(n+1);
+		I.resize(n+1);
+		F[0]=I[0]=1;
+		for(int i=1;i<=n;i++)
+		{
+			F[i]=(F[i-1]*i)%MOD;
+			I[i]=powN(F[i],MOD-2);
+		}
+	}
+	ll nCr(int n,int r)
+	{
+		if(r>n) return 0;
+		return (((F[n]*I[r])%MOD)*I[n-r])%MOD;
+	}
+};
+///////////////////PnC/////////////////////
+
 int main()
 {
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	PnC P;
+	P.init(n);
+	ll ans = 0;
+	for(int pos=1;pos<=n;pos++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		ans += P.nCr(n-1,pos-1);
+		ans%=MOD;
 	}
-	cout<<final_ans<<endl;
+	ans = P.F[n]-ans;
+	ans%=MOD;
+	ans+=MOD;
+	ans%=MOD;
+	cout<<ans<<endl;
+
 }	

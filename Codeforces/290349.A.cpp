@@ -28,30 +28,41 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	int n,m;
+	cin>>n>>m;
+	multiset<pii> S;
+	for(int i=0;i<m;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		int x;
+		cin>>x;
+		S.insert({x,-1});
 	}
-	cout<<final_ans<<endl;
+	cin>>m;
+	for(int i=0;i<m;i++)
+	{
+		int x;
+		cin>>x;
+		S.insert({x,1});
+	}
+	int open = 0;
+	int ans = 0;
+	int last = 1;
+	for(auto p:S)
+	{
+		if(p.second==-1)
+		{
+			if(open==0)
+			{
+				ans = max(ans, p.first-last);
+			}
+			open++;
+		}
+		else
+		{
+			open--;
+			last = p.first+1;
+		}
+	}
+	ans = max(ans,n-last+1);
+	cout<<ans<<endl;
 }	

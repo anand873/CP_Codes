@@ -23,35 +23,61 @@ typedef vector<pll> vpll;
 #define KStest() int t,t1;cin>>t;t1=t;while(t--)
 #define KScout cout<<"Case #"<<t1-t<<": "
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-const int MOD = 1e9+7,MAX = 1e6+5;
+const int MOD = 998244353,MAX = 2e5+5;
 const ll INF = 1e18+5;
+
 
 int main()
 {
+	fastio
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	vi A(n);
+	take(A,0,n);
+	map<int,int> M;
+	vvi In(n);
+	for(int i=0;i<n;i++) 
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		In[A[i]].push_back(i+1);
+		M[A[i]]++;
 	}
-	cout<<final_ans<<endl;
-}	
+	int curr=0;
+	vi X;
+	bool can=true;
+	vi Ans;
+	for(int i=0;i<n;i++)
+	{
+		if(M[curr]!=0)
+		{
+			Ans.push_back(In[curr].back());
+			In[curr].pop_back();
+			M[curr]--;
+			curr++;
+		}
+		else
+		{
+			bool thiscan=false;
+			for(int j=curr-3;j>=0;j-=3)
+			{
+				if(M[j]!=0) 
+				{
+					Ans.push_back(In[j].back());
+					In[j].pop_back();
+					M[j]--;
+					thiscan=true;
+					curr=j+1;
+					break;
+				}
+			}
+			if(thiscan) continue;
+			else {can=false;break;}
+		}
+	}
+	if(can)
+	{
+		cout<<"Possible"<<endl;
+		prinv(Ans);
+	}
+	else cout<<"Impossible"<<endl;
+	
+}

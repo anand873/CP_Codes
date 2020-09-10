@@ -28,30 +28,49 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
-	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
-		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
-		}
+	ll n,r1,r2,r3,d;
+	cin>>n>>r1>>r2>>r3>>d;
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+	r1 = min(r1,r3);
+
+	vi A(n);
+	take(A,0,n);
+	ll t = 0;
+	int notdone=n+1;
+	vector<bool> D(n);
+	for(int i=0;i<n-1;i++)
+	{
+		int x;
+		if(notdone<i) x = min(r1,r2);
+		else x = min(r1,r2)+d;
+		
+		if(r1*A[i]+r3<=r2+x)
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			D[i]=true;
+			t += r1*A[i]+r3+d;
 		}
-		final_ans = max(final_ans,ans-mx);
+		else
+		{
+			t += r2+d;
+		}
+		cout<<t<<endl;
 	}
-	cout<<final_ans<<endl;
+	t += min(r1*A[n-1]+r3, r2+d+d+min(r1,r2));
+
+	if(notdone<=n-2) t+=d;
+
+	for(int i=n-2;i>=notdone;i--)
+	{
+		if(!D[i])
+		{
+			t += min(r1,r2);
+		}
+		t+=d;
+	}
+	t-=d;
+	cout<<t<<endl;
+
+	
+
+
 }	

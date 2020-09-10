@@ -28,30 +28,31 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		int n;
+		cin>>n;
+		string s;
+		cin>>s;
+		vi V(n+1);
+		for(int i=0;i<n;i++)
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			V[i+1] = s[i]-'0';
 		}
 
-		vi dp(n+1);
-		int ans = -MOD;
+		vl PS(n+1);
+		map<int,ll> M;
+		ll ans=0;
 		for(int i=1;i<=n;i++)
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			PS[i] = V[i] + PS[i-1];
 		}
-		final_ans = max(final_ans,ans-mx);
+		for(int i=0;i<=n;i++) M[PS[i]-i]++;
+
+		for(auto m:M)
+		{
+			ans += m.second*(m.second-1)/2;
+		}
+		cout<<ans<<endl;
 	}
-	cout<<final_ans<<endl;
 }	

@@ -30,28 +30,53 @@ int main()
 {
 	int n;
 	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	vi A(n);
+	take(A,0,n);
+	map<int,int> D;
+	sort(all(A));
+	for(int i=1;i<n;i++)
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		D[A[i]-A[i-1]]++;
+	}
+	if(D.size()==0)
+	{
+		cout<<-1<<endl;
+	}
+	else if(D.size()>2)
+	{
+		cout<<0<<endl;
+	}
+	else if(D.size()==1)
+	{
+		if(A.size()!=2||(A[1]-A[0])%2)
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			cout<<2<<endl;
+			cout<<2*A[0]-A[1]<<" "<<2*A[n-1]-A[n-2]<<endl;
+		}
+		else
+		{
+			cout<<3<<endl;
+			cout<<2*A[0]-A[1]<<" "<<(A[1]+A[0])/2<<" "<<2*A[n-1]-A[n-2]<<endl;
 		}
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
+	else
+	{
+		int d1 = D.begin()->first;
+		int d2 = D.rbegin()->first;
+
+		if(D[d2]>1 || d2!=2*d1) cout<<0<<endl;
+		else
+		{
+			cout<<1<<endl;
+			for(int i=1;i<n;i++)
+			{
+				if(A[i]-A[i-1]==d2)
+				{
+					cout<<A[i-1]+d1<<endl;
+					break;
+				}
+			}	
+		}
+	}
 }	

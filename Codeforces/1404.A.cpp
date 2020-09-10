@@ -28,30 +28,61 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		int n,k;
+		cin>>n>>k;
+		string s;
+		cin>>s;
+		bool can=true;
+		vi vis(n);
+		for(int i=0;i<n;i++)
 		{
-			if(B[i]>mx)
+			if(vis[i]) continue;
+			set<char> S;
+			for(int j=i;j<n;j+=k)
 			{
-				B[i] = -MOD;
+				vis[j]=true;
+				if(s[j]!='?') S.insert(s[j]);
+			}
+			if(S.size()==2)
+			{
+				can=false;
+				break;
+			}
+			else if(S.size()==1)
+			{
+				char x = *(S.begin());
+				for(int j=i;j<n;j+=k) s[j]=x;
 			}
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+		if(!can) {cout<<"NO"<<endl;continue;}
+		vvi dp(n+1,vi(3));
+		for(int i=0;i<n;i++)
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			dp[i+1] = dp[i];
+			if(s[i]=='0') dp[i+1][0]++;
+			else if(s[i]=='1') dp[i+1][1]++;
+			else dp[i+1][2]++;  
 		}
-		final_ans = max(final_ans,ans-mx);
+		for(int i=0;i+k<=n;i++)
+		{
+			int a2 = dp[i+k][2]-dp[i][2];
+			int a1 = dp[i+k][1]-dp[i][1];
+			int a0 = dp[i+k][0]-dp[i][0];
+ 
+			if((a1-a0+a2)%2==0&&a1-a0+a2>=0&&a2-a1+a0>=0)
+			{
+				continue;
+			}
+			else
+			{
+				can=false;
+			}
+ 		}
+ 		if(can) cout<<"YES"<<endl;
+ 		else cout<<"NO"<<endl;
+
+
 	}
-	cout<<final_ans<<endl;
 }	

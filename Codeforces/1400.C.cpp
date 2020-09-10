@@ -28,30 +28,74 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		string s;
+		cin>>s;
+		int x;
+		cin>>x;
+		string w;
+		int n=s.length();
+		for(int i=0;i<n;i++)
 		{
-			if(B[i]>mx)
+			w.push_back('*');
+		}
+		bool can=true;
+		for(int i=0;i<n;i++)
+		{
+			if(i-x<0&&i+x<n)
 			{
-				B[i] = -MOD;
+				if(s[i]=='0')
+				{
+					w[i+x]='0';
+				}
+				else w[i+x]='1';
 			}
+			else if(i-x<0&&i+x>=n)
+			{
+				if(s[i]=='0') continue;
+				else can=false;
+			}
+			else if(i-x>=0&&i+x<n)
+			{
+				if(s[i]=='0')
+				{
+					if(w[i-x]!='1'&&w[i+x]!='1')
+					{
+						w[i-x]='0';
+						w[i+x]='0';
+					}
+					else can=false;
+				}
+				else
+				{
+					if(w[i-x]=='0') w[i+x]='1';
+					else w[i-x] = '1';
+				}
+			}
+			else
+			{
+				if(s[i]=='0')
+				{
+					if(w[i-x]!='1') w[i-x]='0';
+					else can=false;
+				}
+				else
+				{
+					if(w[i-x]=='0') can=false;
+					else w[i-x]='1';
+				}
+			}
+			if(!can) break;
 		}
-
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
+		if(!can) cout<<-1<<endl;
+		else
 		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
+			for(int i=0;i<n;i++)
+			{
+				if(w[i]=='*') w[i]='0';
+			}
+			cout<<w<<endl;
 		}
-		final_ans = max(final_ans,ans-mx);
 	}
-	cout<<final_ans<<endl;
 }	

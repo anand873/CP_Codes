@@ -28,30 +28,32 @@ const ll INF = 1e18+5;
 
 int main()
 {
-	int n;
-	cin>>n;
-	vi A(n+1);
-	take(A,1,n);
-	int final_ans = -MOD;
-	for(int mx=-30;mx<=30;mx++)
+	fastio
+	test()
 	{
-		vi B = A;
-		for(int i=1;i<=n;i++)
+		int n;
+		ll k;
+		cin>>n>>k;
+		vl A(n);
+		take(A,0,n);
+
+		if(k%2)
 		{
-			if(B[i]>mx)
-			{
-				B[i] = -MOD;
-			}
+			ll ma = -INF;
+			for(int i=0;i<n;i++) ma = max(ma,A[i]);
+			for(int i=0;i<n;i++) A[i] = ma-A[i];
+		}
+		else
+		{
+			ll ma = -INF;
+			for(int i=0;i<n;i++) ma = max(ma,A[i]);
+			for(int i=0;i<n;i++) A[i] = ma-A[i];
+
+			ma = -INF;
+			for(int i=0;i<n;i++) ma = max(ma,A[i]);
+			for(int i=0;i<n;i++) A[i] = ma-A[i];
 		}
 
-		vi dp(n+1);
-		int ans = -MOD;
-		for(int i=1;i<=n;i++)
-		{
-			dp[i] = max(dp[i-1]+B[i],B[i]);
-			ans = max(ans,dp[i]);
-		}
-		final_ans = max(final_ans,ans-mx);
+		prinv(A);
 	}
-	cout<<final_ans<<endl;
 }	
