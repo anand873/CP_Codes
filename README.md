@@ -3,4 +3,4 @@ My codes to different Competitive Programming Problems.
 
 * Codeforces : doubleux
 * Codechef   : doubleux
-* AtCoder    : anand873
+* AtCoder    : doubleux
