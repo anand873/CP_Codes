@@ -1,6 +1,9 @@
 # CP_Codes
 My codes to different Competitive Programming Problems.
 
-* doubleux ![badge](https://run.kaist.ac.kr/badges/codeforces/doubleux.svg)
-* doubleux ![badge](https://run.kaist.ac.kr/badges/codechef/doubleux.svg)
-* doubleux ![badge](https://run.kaist.ac.kr/badges/atcoder/doubleux.svg)
+* doubleux [![Badge](https://cp-logo.vercel.app/codeforces/doubleux)]
+(https://www.codeforces.com/profile/doubleux)
+* doubleux [![Badge](https://cp-logo.vercel.app/codechef/doubleux)]
+(https://www.codechef.com/users/doubleux)
+* doubleux [![Badge](https://cp-logo.vercel.app/atcoder/doubleux)]
+(https://www.atcoder.jp/users/doubleux)
